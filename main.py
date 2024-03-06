@@ -91,8 +91,22 @@ def main():
     output_text("GO!")
     
     brick.speaker.play_notes(['E4/4', 'C4/4', 'D4/4', 'E4/4', 'D4/4', 'C4/4', 'C4/4', 'E4/4', 'B4/4', 'B4/4', 'A4/4', 'A4/4'], tempo=240)
-    while (True):        
+    while (True):
         engine.straight(100) # in mm
+
+        steer.run_target(steer_speed * 2, max_right_angle // 2)
+
+        engine.straight(100) # in mm
+
+        steer.run_target(steer_speed * 2, 0)
+
+        engine.straight(100) # in mm
+
+        steer.run_target(steer_speed * 2, max_left_angle // 2)
+        
+        steer.run_target(steer_speed * 2, 0)
+
+    
 
         
 
