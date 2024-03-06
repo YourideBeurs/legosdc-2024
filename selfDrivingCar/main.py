@@ -66,8 +66,8 @@ def main():
     steer_speed = 250
 
     # Print some text to the LCD screen and the debug output
-    output_text("Watch out!")
-    output_text("Max-veloctiy Verstapping is racing!")
+    output_text("RDW Lego")
+    output_text("Self Driving Challenge")
 
     # Prepare the steering of the vehicle by calibrating/homing the steering motor
     output_text("Homing steering wheels...")
@@ -80,21 +80,71 @@ def main():
     engine.settings(straight_speed=engine_speed, straight_acceleration=engine_acceleration, turn_rate=0, turn_acceleration=0)
     output_text("Done!")
 
-    # Wait for bumper touch sensor press
-    output_text("checking bumper")
-    while (not bumper_sensor.pressed()):
-        wait(100)   
+    # Make some room by driving backwards until the distance sensor is reporting atleast "50"
+    while (infrared_sensor.distance() < 50):
+        output_text("Too little space, moving backwards...")
+        engine.straight(-100)
 
+    # Wait for bumper touch sensor press
+    output_text("Ready.... Set....")
+    output_text("(waiting for bumper press)")
+    while (not bumper_sensor.pressed()):
+        wait(100)
     # Sound a beep, which is required for the competition to allow accurate lap-timing.
     brick.speaker.beep(500, 250)
     # Drive one centimeter
     output_text("GO!")
-    
-    brick.speaker.play_notes(['E4/4', 'C4/4', 'D4/4', 'E4/4', 'D4/4', 'C4/4', 'C4/4', 'E4/4', 'B4/4', 'B4/4', 'A4/4', 'A4/4'], tempo=240)
-    while (True):        
-        engine.straight(100) # in mm
+    engine.straight(10)
 
-        
+    # Dance sequence for demo purposes
+    output_text("Starting dancing...")
+    brick.speaker.say("Dancing the Self Driving Challenge Dance!")
+    brick.speaker.play_notes(['E4/4', 'C4/4', 'D4/4', 'E4/4', 'D4/4', 'C4/4', 'C4/4', 'E4/4', 'B4/4', 'B4/4', 'A4/4', 'A4/4'], tempo=240)
+    while (True):
+        steer.run_target(steer_speed // 2, max_left_angle // 2)
+        steer.run_target(steer_speed // 2, max_right_angle // 2)
+        steer.run_target(steer_speed // 2, 0)
+
+        steer.run_target(steer_speed * 2, max_left_angle // 2)
+        steer.run_target(steer_speed * 2, max_right_angle // 2)
+        steer.run_target(steer_speed * 2, 0)
+
+        steer.run_target(steer_speed * 2, max_left_angle // 2)
+        steer.run_target(steer_speed * 2, max_right_angle // 2)
+        steer.run_target(steer_speed * 2, 0)
+
+        engine.straight(100)
+        engine.straight(-100)
+
+        engine.straight(50)
+        engine.straight(-50)
+
+        engine.straight(50)
+        engine.straight(-50)
+
+        steer.run_target(steer_speed, max_left_angle)
+        engine.straight(100)
+        steer.run_target(steer_speed, max_right_angle)
+        engine.straight(100)
+        steer.run_target(steer_speed, 0)
+
+        steer.run_target(steer_speed, max_left_angle)
+        engine.straight(-100)
+        steer.run_target(steer_speed, max_right_angle)
+        engine.straight(-100)
+        steer.run_target(steer_speed, 0)
+
+        steer.run_target(steer_speed, max_right_angle)
+        engine.straight(100)
+        steer.run_target(steer_speed, max_left_angle)
+        engine.straight(100)
+        steer.run_target(steer_speed, 0)
+
+        steer.run_target(steer_speed, max_right_angle)
+        engine.straight(-100)
+        steer.run_target(steer_speed, max_left_angle)
+        engine.straight(-100)
+        steer.run_target(steer_speed, 0)
 
 if __name__ == '__main__':
     main()
