@@ -1,3 +1,5 @@
+https://miro.com/welcomeonboard/bzY2THZEVjRJOXV0cnIxUnRWd1p2eUJlbk1VVmRrTGZDREl6VTl1UXRSd29pRHVBYnpnREZvN0g1Q0c1N2ljY3wzNDU4NzY0NTMzMjYxNjI3NzA2fDI=?share_link_id=997271660286
+
 # RDW Lego Self Driving Challenge
 
 ```
