@@ -50,6 +50,41 @@ def output_text(text):
     brick.screen.print(text)
     print(text)
 
+def measure_turn():
+    
+    # Turn left
+    steer.run_target(steer_speed * 2, max_left_angle // 2)
+    engine.straight(50) # in mm
+
+    left_distance = infrared_sensor.distance()
+
+    engine.straight(-50)
+
+    steer.run_target(steer_speed * 2, max_right_angle // 2)
+    engine.straight(50) # in mm
+
+    right_distance = infrared_sensor.distance()  
+    engine.straight(-50)
+
+    if left_distance > right_distance:
+        return "left"
+    else:
+        return "right"
+
+def take_turn(corner):
+    if corner == "left":
+        steer.run_target(steer_speed * 2, max_left_angle // 2)
+
+    else:
+        steer.run_target(steer_speed * 2, max_right_angle // 2)
+
+    while infrared_sensor.distance() < 50:
+        engine.straight(50) # in mm
+
+    steer.run_target(steer_speed * 2, 0)
+    
+    return
+
 def main():
     """
     Code body that will be executed on startup.
@@ -94,9 +129,11 @@ def main():
     while (True):
         engine.straight(100) # in mm
 
-        while (infrared_sensor.distance() < 50):
-            steer.run_target(steer_speed * 2, max_right_angle // 2)
-            engine.straight(100) # in mm
+        if (infrared_sensor.distance() < 50):
+            
+            corner = measure_turn()
+            take_turn(corner)        
+            
 
         steer.run_target(steer_speed * 2, 0)
 
