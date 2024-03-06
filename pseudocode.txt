@@ -1,0 +1,59 @@
+# Initialize sensors and actuators
+initialize color_sensor on port 2
+initialize touch_sensor on port 3
+initialize infrared_sensor on port 4
+initialize motorD for steering on port D
+initialize motorB for left wheel on port B
+initialize motorC for right wheel on port C
+calibrate steering motorD to center
+
+# Start beep to indicate beginning of the race
+beep()
+
+# Main loop
+while true:
+    read distance from infrared_sensor
+    if distance < threshold:  # If obstacle too close
+        apply brake to motors B and C
+        reverse slightly
+        adjust steering to avoid obstacle
+    else:
+        set motors B and C speed to maximum for forward motion
+
+    if touch_sensor is pressed:  # If rear collision detected
+        apply brake to motors B and C
+        reverse slightly
+        continue forward
+
+    # Optional: use color_sensor to follow track lines (if applicable)
+    read color from color_sensor
+    adjust steering based on color reading
+
+    # Check for race completion or other conditions to stop the car
+
+# End of the race
+beep()  # Sound beep to indicate end
+stop all motors
+
+
+
+def main():
+    ...
+    output_text("GO!")
+    
+    # Define track segments: (straight_length, turn_angle, speed_before_turn)
+    track_segments = [
+        (500, 90, 150),  # Go straight 500mm, then turn 90 degrees, slow to 150 mm/s before turn
+        (400, -90, 150), # Next segment: straight 400mm, turn -90 degrees (right turn), slow to 150 mm/s before turn
+        ...
+    ]
+
+    for length, angle, slow_speed in track_segments:
+        engine.settings(straight_speed=engine_speed, straight_acceleration=engine_acceleration)
+        engine.straight(length)  # Go straight
+        engine.settings(straight_speed=slow_speed, straight_acceleration=engine_acceleration)  # Slow down before turn
+        steer.run_target(steer_speed, angle)  # Make the turn
+    
+    output_text("Race Finished")
+    ...
+
