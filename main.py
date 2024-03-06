@@ -98,7 +98,7 @@ def main():
             steer.run_target(steer_speed * 2, max_right_angle // 2)
             engine.straight(100) # in mm
 
-        # steer.run_target(steer_speed * 2, 0)
+        steer.run_target(steer_speed * 2, 0)
 
         # engine.straight(100) # in mm
 
