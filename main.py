@@ -50,41 +50,6 @@ def output_text(text):
     brick.screen.print(text)
     print(text)
 
-def measure_turn():
-    
-    # Turn left
-    steer.run_target(steer_speed * 2, max_left_angle // 2)
-    engine.straight(50) # in mm
-
-    left_distance = infrared_sensor.distance()
-
-    engine.straight(-50)
-
-    steer.run_target(steer_speed * 2, max_right_angle // 2)
-    engine.straight(50) # in mm
-
-    right_distance = infrared_sensor.distance()  
-    engine.straight(-50)
-
-    if left_distance > right_distance:
-        return "left"
-    else:
-        return "right"
-
-def take_turn(corner):
-    if corner == "left":
-        steer.run_target(steer_speed * 2, max_left_angle // 2)
-
-    else:
-        steer.run_target(steer_speed * 2, max_right_angle // 2)
-
-    while infrared_sensor.distance() < 50:
-        engine.straight(50) # in mm
-
-    steer.run_target(steer_speed * 2, 0)
-    
-    return
-
 def main():
     """
     Code body that will be executed on startup.
@@ -116,35 +81,25 @@ def main():
     output_text("Done!")
 
     # Wait for bumper touch sensor press
-    output_text("checking bumper")
     while (not bumper_sensor.pressed()):
-        wait(100)   
-
-    # Sound a beep, which is required for the competition to allow accurate lap-timing.
-    brick.speaker.beep(500, 250)
-    # Drive one centimeter
+        wait(100)
     output_text("GO!")
-    
-    brick.speaker.play_notes(['E4/4', 'C4/4', 'D4/4', 'E4/4', 'D4/4', 'C4/4', 'C4/4', 'E4/4', 'B4/4', 'B4/4', 'A4/4', 'A4/4'], tempo=240)
+    engine.straight(10) 
+
+    turn=0
     while (True):
-        engine.straight(100) # in mm
-
-        if (infrared_sensor.distance() < 50):
-            
-            corner = measure_turn()
-            take_turn(corner)        
-            
-
-        steer.run_target(steer_speed * 2, 0)
-
-        # engine.straight(100) # in mm
-
-        # steer.run_target(steer_speed * 2, max_left_angle // 2)
+        engine.drive(150,0)
+        while (infrared_sensor.distance() < 60):
+            if(infrared_sensor.distance() > 47 and turn != 1):
+                steer.run_target(steer_speed*2.2, max_right_angle)
+                engine.drive(100,0)
+                turn = 1
+            elif(infrared_sensor.distance() < 47 and turn == 1):
+                steer.run_target(steer_speed*2.2, max_left_angle)
+                engine.drive(100,0)
+        turn = 0
+        steer.run_target(steer_speed // 2, 0)
         
-        # steer.run_target(steer_speed * 2, 0)
-
-
-
         
 
 if __name__ == '__main__':
